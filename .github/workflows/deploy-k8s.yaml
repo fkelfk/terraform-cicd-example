@@ -33,12 +33,12 @@ jobs:
       run: |
         docker build -t us.gcr.io/$GCP_PROJECT_ID/nodeappimage:$IMAGE_TAG .
         docker push us.gcr.io/$GCP_PROJECT_ID/nodeappimage:$IMAGE_TAG
-      working-directory: ./apps/api-auth
+      working-directory: ./apps/api-users
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
     - name: Terraform init
       run: terraform init -backend-config="bucket=$TF_STATE_BUCKET_NAME" -backend-config="prefix=test"
-      working-directory: ./apps/api-auth/terraform
+      working-directory: ./terraform
     - name: Terraform Plan
       run: |
         terraform plan \
@@ -46,8 +46,8 @@ jobs:
         -var="project_id=$GCP_PROJECT_ID" \
         -var="container_image=us.gcr.io/$GCP_PROJECT_ID/nodeappimage:$IMAGE_TAG" \
         -out=PLAN
-      working-directory: ./apps/api-auth/terraform
+      working-directory: ./terraform
     - name: Terraform Apply
       run: terraform apply PLAN
-      working-directory: ./apps/api-auth/terraform
+      working-directory: ./terraform
     

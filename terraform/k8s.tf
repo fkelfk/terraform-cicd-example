@@ -1,9 +1,9 @@
 resource "kubernetes_deployment" "name" {
     metadata {
-        name = "auth-deploy"
+        name = "users-deploy"
         labels = {
             "type" = "backend"
-            "app" = "auth"
+            "app" = "users"
         }
     }
     spec {
@@ -11,7 +11,7 @@ resource "kubernetes_deployment" "name" {
         selector {
             match_lables = {
                 "type" = "backend"
-                "app" = "auth"
+                "app" = "users"
             }
         }
         template {
@@ -19,12 +19,12 @@ resource "kubernetes_deployment" "name" {
                 name = "authpod"
                 labels = {
                     "type" = "backend"
-                    "app" = "auth"
+                    "app" = "users"
                 }
             }
             spec {
                 container {
-                    name = "auth"
+                    name = "users"
                     image = var.container_image
                     port = {
                         container_port = 3310
@@ -53,7 +53,7 @@ resource "kubernetes_serviec" "auth-service" {
         }
         selector = {
             "type" = "backend"
-            "app" = "auth"
+            "app" = "users"
         }
     }
 }
